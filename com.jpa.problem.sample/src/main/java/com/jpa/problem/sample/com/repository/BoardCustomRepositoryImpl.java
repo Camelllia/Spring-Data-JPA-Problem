@@ -19,7 +19,8 @@ public class BoardCustomRepositoryImpl implements BoardCustomRepository {
     @Override
     public List<Board> findAllByFetchJoin() {
         return jpaQueryFactory.selectFrom(board)
-                .leftJoin(board.category, category).fetchJoin()
+                .innerJoin(board.category, category)
+                .fetchJoin()
                 .fetch();
     }
 }

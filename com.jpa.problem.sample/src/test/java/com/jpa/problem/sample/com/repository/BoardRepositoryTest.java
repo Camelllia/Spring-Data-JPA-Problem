@@ -2,6 +2,7 @@ package com.jpa.problem.sample.com.repository;
 
 import com.jpa.problem.sample.com.domain.Board;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,22 @@ class BoardRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
+    @DisplayName("N+1 발생")
     void test1() {
-
-        System.out.println("---- START FIND ALL ----");
         List<Board> result = boardRepository.findAll();
-        for (Board board : result) {
-            System.out.println("Board Title: " + board.getTitle());
-            System.out.println("Category Name: " + board.getCategory().getName());
-        }
+        result.forEach(board -> {
+                    System.out.println("Board Title: " + board.getTitle());
+                    System.out.println("Category Name: " + board.getCategory().getName());
+                });
+    }
 
-
-        System.out.println("---- START FIND ALL BY Fetch Join ----");
-        List<Board> fetchJoinResult = boardRepository.findAllByFetchJoin();
-        for (Board board : result) {
-            System.out.println("Board Title: " + board.getTitle());
-            System.out.println("Category Name: " + board.getCategory().getName());
-        }
+    @Test
+    @DisplayName("N+1 문제 해결 - Fetch Join")
+    void test2() {
+        List<Board> result = boardRepository.findAllByFetchJoin();
+        result.forEach(board -> {
+                    System.out.println("Board Title: " + board.getTitle());
+                    System.out.println("Category Name: " + board.getCategory().getName());
+                });
     }
 }
